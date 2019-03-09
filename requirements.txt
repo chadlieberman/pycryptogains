@@ -1,0 +1,8 @@
+certifi==2018.11.29
+chardet==3.0.4
+enum34==1.1.6
+idna==2.8
+psycopg2==2.7.7
+requests==2.21.0
+SQLAlchemy==1.2.18
+urllib3==1.24.1
