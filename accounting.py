@@ -360,6 +360,8 @@ class CapGains(object):
 		for key, aggr in fifo_queue._cap_gains_aggrs.iteritems()]
 		short = {
 			'gain': reduce(lambda x, y: x + y['gain'], short_details, Decimal(0.0)),
+			'total_proceeds': reduce(lambda x, y: x + y['total_proceeds'], short_details, Decimal(0.0)),
+			'total_cost_basis': reduce(lambda x, y: x + y['total_cost_basis'], short_details, Decimal(0.0)),
 			'details': short_details
 		}
 		long_details = [
@@ -373,6 +375,8 @@ class CapGains(object):
 		for key, aggr in fifo_queue._cap_gains_aggrs.iteritems()]
 		long = {
 			'gain': reduce(lambda x, y: x + y['gain'], long_details, Decimal(0.0)),
+			'total_proceeds': reduce(lambda x, y: x + y['total_proceeds'], long_details, Decimal(0.0)),
+			'total_cost_basis': reduce(lambda x, y: x + y['total_cost_basis'], long_details, Decimal(0.0)),
 			'details': long_details
 		}
 		return {
