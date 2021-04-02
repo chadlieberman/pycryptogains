@@ -30,9 +30,10 @@ class ExchangeAuth(AuthBase):
 	def __call__(self, request):
 		timestamp = str(time.time())
 		message = timestamp + request.method + request.path_url + (request.body or '')
+		encoded_message = message.encode('utf8')
 		hmac_key = base64.b64decode(self.secret)
-		signature = hmac.new(hmac_key, message, hashlib.sha256)
-		signature_b64 = signature.digest().encode('base64').rstrip('\n')
+		signature = hmac.new(hmac_key, encoded_message, hashlib.sha256)
+		signature_b64 = base64.b64encode(signature.digest()).decode()
 
 		request.headers.update({
 			'CB-ACCESS-SIGN': signature_b64,
@@ -86,6 +87,8 @@ class AuthRequesterFactory(object):
 			params = {'after': after},
 			auth = self._auth,
 			verify = True)
+		print(response)
+		print(response.text)
 		if isinstance(response.json(), list):
 			response_data += response.json()
 		else:
@@ -147,13 +150,35 @@ class Api(object):
 		if currency == 'XRP':
 			if dt == datetime.datetime(2018,1,1):
 				return Decimal(2.300000)
+			elif dt == datetime.datetime(2018,2,1):
+				return Decimal(1.16)
+			elif dt == datetime.datetime(2018,3,1):
+				return Decimal(0.904131)
+			elif dt == datetime.datetime(2018,4,1):
+				return Decimal(0.513854)
+			elif dt == datetime.datetime(2018,5,1):
+				return Decimal(0.838355)
+			elif dt == datetime.datetime(2018,6,1):
+				return Decimal(0.612893)
+			elif dt == datetime.datetime(2018,7,1):
+				return Decimal(0.465944)
+			elif dt == datetime.datetime(2018,8,1):
+				return Decimal(0.435562)
+			elif dt == datetime.datetime(2018,9,1):
+				return Decimal(0.335313)
+			elif dt == datetime.datetime(2018,10,1):
+				return Decimal(0.583511)
+			elif dt == datetime.datetime(2018,11,1):
+				return Decimal(0.448620)
+			elif dt == datetime.datetime(2018,12,1):
+				return Decimal(0.362557)
 			elif dt == datetime.datetime(2019,1,1):
 				return Decimal(0.352512)
 			elif dt == datetime.datetime(2019,3,4):
 				return Decimal(0.312021)
 			else:
 				raise Exception('No XRP price for that date')
-		if isinstance(dt, basestring):
+		if isinstance(dt, str):
 			dt = datetime.datetime.strptime(dt, '%Y-%m-%dT%H:%M:%S.%fZ')
 		product_id = '%s-USD' %(currency)
 		# Get candles by the minute around the requested time

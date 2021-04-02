@@ -1,5 +1,6 @@
 import datetime
 from decimal import Decimal
+from functools import reduce
 import logging
 import json
 import os
@@ -208,7 +209,7 @@ class Portfolio(object):
 		if not os.path.exists(filepath):
 			raise Exception('No portfolio file exists at "%s"' %(filepath))
 		with open(filepath, 'rb') as pickle_file:
-			data = pickle.load(pickle_file)
+			data = pickle.load(pickle_file, encoding='latin1')
 		return data
 
 	def save(self):
@@ -234,7 +235,7 @@ class Portfolio(object):
 	def mark(self):
 		report = dict()
 		report['wallets'] = dict()
-		for currency, wallet in self._wallets.iteritems():
+		for currency, wallet in self._wallets.items():
 			report['wallets'][currency] = wallet.report(self._time)
 		total_unrealized_gains = reduce(
 			lambda x, y: x + y['unrealized_gains'],
@@ -357,7 +358,7 @@ class CapGains(object):
 				'total_proceeds': aggr._short._total_proceeds,
 				'gain': aggr._short._gain
 			}
-		for key, aggr in fifo_queue._cap_gains_aggrs.iteritems()]
+		for key, aggr in fifo_queue._cap_gains_aggrs.items()]
 		short = {
 			'gain': reduce(lambda x, y: x + y['gain'], short_details, Decimal(0.0)),
 			'total_proceeds': reduce(lambda x, y: x + y['total_proceeds'], short_details, Decimal(0.0)),
@@ -372,7 +373,7 @@ class CapGains(object):
 				'total_proceeds': aggr._long._total_proceeds,
 				'gain': aggr._long._gain
 			}
-		for key, aggr in fifo_queue._cap_gains_aggrs.iteritems()]
+		for key, aggr in fifo_queue._cap_gains_aggrs.items()]
 		long = {
 			'gain': reduce(lambda x, y: x + y['gain'], long_details, Decimal(0.0)),
 			'total_proceeds': reduce(lambda x, y: x + y['total_proceeds'], long_details, Decimal(0.0)),
@@ -434,7 +435,7 @@ if __name__ == '__main__':
 	printable_report = dict()
 	def make_printable(d):
 		new_dict = dict()
-		for k, v in d.iteritems():
+		for k, v in d.items():
 			if isinstance(k, Currency):
 				k = CURRENCIES[k.value]
 			if isinstance(v, dict):

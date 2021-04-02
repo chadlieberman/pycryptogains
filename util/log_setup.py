@@ -21,7 +21,7 @@ def setupLogging(
 	log_level,
 	add_manager_time = True,
 	add_pid = True):
-	level = logging._levelNames.get(log_level.upper())
+	level = log_level #logging._levelNames.get(log_level.upper())
 	logStreamHandler = logging.StreamHandler()
 	logStreamHandler.setLevel(level)
 	format = '%(asctime)s %(manager_time)s%(pid)5s%(shortlevel)s %(filename)s:%(lineno)d %(name)s:%(funcName)s %(message)s'
@@ -34,5 +34,5 @@ def setupLogging(
 	logging.getLogger().setLevel(level)
 
 def setLogLevel(log_level):
-	level = logging._levelNames.get(log_level.upper())
-	logging.getLogger().setLevel(level)
+	#level = logging._levelNames.get(log_level.upper())
+	logging.getLogger().setLevel(log_level)

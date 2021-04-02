@@ -63,7 +63,7 @@ class TransactionIngester(object):
 	def get_fills(self, backwards_until, afters):
 		db_session = get_db_session()
 		try:
-			for product_id, after in afters.iteritems():
+			for product_id, after in afters.items():
 				self._log.info('Ingesting fills for product "%s"' %(product_id))
 				for fill in self._api.get_fills(product_id, backwards_until, after):
 					self.upsert_fill(fill, db_session)
@@ -98,7 +98,11 @@ if __name__ == '__main__':
 
 	# Set afters to control what gets ingested
 	afters = {
-		'LTC-BTC': None
+		'ETH-BTC': None,
+		'ETH-USD': None,
+		'BTC-USD': None,
+		'LTC-USD': None,
+		'BCH-USD': None,
 	}
 
 	ingester = TransactionIngester(opts.account)
